@@ -252,16 +252,25 @@ class FlexibleWebScraper:
         found_fields = sum(1 for v in data.values() if v not in (None, "", "Not Found"))
         return (found_fields / total_fields) >= float(self.config.get('success_threshold', 0.5))
 
-    def save_data(self, filename_base='scraped_data'):
+    def save_data(self, filename_base='scraped_data', output_dir=None):
         if not self.data:
             print("No data to save")
             return
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         df = pd.DataFrame(self.data)
 
-        excel_file = f"{filename_base}_{timestamp}.xlsx"
-        csv_file = f"{filename_base}_{timestamp}.csv"
-        json_file = f"{filename_base}_{timestamp}.json"
+        base_excel = f"{filename_base}_{timestamp}.xlsx"
+        base_csv = f"{filename_base}_{timestamp}.csv"
+        base_json = f"{filename_base}_{timestamp}.json"
+
+        if output_dir:
+            excel_file = os.path.join(output_dir, base_excel)
+            csv_file = os.path.join(output_dir, base_csv)
+            json_file = os.path.join(output_dir, base_json)
+        else:
+            excel_file = base_excel
+            csv_file = base_csv
+            json_file = base_json
 
         try:
             df.to_excel(excel_file, index=False, engine='openpyxl')
@@ -408,6 +417,7 @@ def parse_args():
     parser.add_argument('-u', '--url', help='Single URL to scrape', default=None)
     parser.add_argument('-U', '--url-file', help='Text file with one URL per line', default=None)
     parser.add_argument('-o', '--out', help='Output filename base (without extension)', default='assessment_reports')
+    parser.add_argument('--out-dir', help='Directory to store output files (Excel/CSV/JSON)', default=None)
     return parser.parse_args()
 
 
@@ -441,7 +451,16 @@ def main():
         return
 
     scraper.bulk_scrape_urls(urls, field_config)
-    scraper.save_data(args.out)
+
+    # Resolve output directory preference: CLI > config > default "outputs"
+    output_dir = args.out_dir or (scraper.config or {}).get('output_dir') or 'outputs'
+    if output_dir:
+        try:
+            os.makedirs(output_dir, exist_ok=True)
+        except Exception as e:
+            print(f"Could not create output directory '{output_dir}': {e}")
+
+    scraper.save_data(args.out, output_dir=output_dir)
     scraper.close()
 
 

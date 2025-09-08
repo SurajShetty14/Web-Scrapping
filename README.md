@@ -15,7 +15,7 @@ pip install -r requirements.txt
 ### 2) Run a single URL
 
 ```powershell
-python flexible_scraper.py --url "https://web.acciomatrix.com/assessment-user-report/705d6358-8618-4a67-a2e1-c563da68e318" --fields fields.sample.yaml --config config.sample.yaml --out assessment_reports
+python flexible_scraper.py --url "https://web.acciomatrix.com/assessment-user-report/705d6358-8618-4a67-a2e1-c563da68e318" --fields fields.sample.yaml --config config.sample.yaml --out assessment_reports --out-dir outputs
 ```
 
 ### 3) Run multiple URLs from file
@@ -23,7 +23,7 @@ python flexible_scraper.py --url "https://web.acciomatrix.com/assessment-user-re
 Create a `urls.txt` with one URL per line, then run:
 
 ```powershell
-python flexible_scraper.py --url-file urls.txt --fields fields.sample.yaml --config config.sample.yaml --out assessment_reports
+python flexible_scraper.py --url-file urls.txt --fields fields.sample.yaml --config config.sample.yaml --out assessment_reports --out-dir outputs
 ```
 
 ### 4) Customizing fields
@@ -39,6 +39,7 @@ python flexible_scraper.py --url-file urls.txt --fields fields.sample.yaml --con
 
 The script saves timestamped files next to the script:
 
+- By default inside `outputs/` (configurable via `--out-dir` or `output_dir` in config)
 - Excel: `assessment_reports_YYYYMMDD_HHMMSS.xlsx`
 - CSV: `assessment_reports_YYYYMMDD_HHMMSS.csv`
 - JSON: `assessment_reports_YYYYMMDD_HHMMSS.json`

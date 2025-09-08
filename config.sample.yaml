@@ -1,6 +1,7 @@
 # Runtime options
 success_threshold: 0.5
 politeness_delay_seconds: 2
+output_dir: outputs  # All Excel/CSV/JSON will be saved here
 
 selenium:
   headless: false
