@@ -1,0 +1,13 @@
+# Virtual environment
+.venv/
+
+# Excel lock files
+~$*.xlsx
+
+# Data exports
+*.csv
+*.json
+*.xlsx
+
+# Screenshots
+screenshots/
