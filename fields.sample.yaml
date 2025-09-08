@@ -1,0 +1,87 @@
+# Sample field configuration for AccioMatrix-like assessment pages
+
+Assessment Name:
+  css_selectors: [".assessment-name", "[data-testid*='assessment']", "h1", "h2"]
+  text_patterns: ["Assessment Name[:\\s]*([^\\n]+)", "Assessment[:\\s]*([^\\n]+)", "Test Name[:\\s]*([^\\n]+)"]
+
+Candidate Name:
+  css_selectors: [".candidate-name", "[data-testid*='candidate']", "[data-testid*='name']"]
+  xpath: ["//*[contains(text(), 'Candidate Name')]/following::*[1]"]
+  text_patterns: ["Candidate Name[:\\s]*([^\\n]+)", "Candidate[:\\s]*([^\\n]+)"]
+
+Email:
+  css_selectors: ["[href^='mailto:']", ".email", "[data-testid*='email']"]
+  text_patterns: ["E-mail[:\\s]*([^\\n]+)", "Email[:\\s]*([^\\n]+)"]
+  attributes:
+    - selector: "[href^='mailto:']"
+      attribute: "href"
+  transform:
+    type: regex
+    pattern: "mailto:"
+    replacement: ""
+
+Total Assessment Time:
+  css_selectors: [".assessment-time", "[data-testid*='time']"]
+  text_patterns: ["Total Assessment Time[:\\s]*([^\\n]+)", "Assessment Time[:\\s]*([^\\n]+)"]
+
+Score Percentage:
+  css_selectors: [".score-percentage", "[data-testid*='score']"]
+  text_patterns: ["Score Percentage[:\\s]*([^\\n]+)", "Score[:\\s]*([^\\n]+)"]
+  transform:
+    type: convert_to_number
+
+Trust Score:
+  css_selectors: [".trust-score", "[data-testid*='trust']"]
+  text_patterns: ["Trust Score[:\\s]*([^\\n]+)"]
+  transform:
+    type: convert_to_number
+
+# Proctoring / Integrity signals
+Tab Switched:
+  text_patterns: ["Tab Switched[-:\\s]*([0-9]+)"]
+  transform:
+    type: convert_to_number
+
+Out of Frame:
+  text_patterns: ["Out of Frame[-:\\s]*([0-9]+)"]
+  transform:
+    type: convert_to_number
+
+Clicked Outside Window:
+  text_patterns: ["Clicked Outside Window[-:\\s]*([0-9]+)"]
+  transform:
+    type: convert_to_number
+
+Multiple Faces Detected:
+  text_patterns: ["Multiple Faces Detected[-:\\s]*([0-9]+)"]
+  transform:
+    type: convert_to_number
+
+External Monitor Detected:
+  text_patterns: ["External Monitor Detected[-:\\s]*([A-Za-z])"]
+
+Fullscreen Exited:
+  text_patterns: ["Fullscreen Exited[-:\\s]*([A-Za-z])"]
+
+Extension Detected:
+  text_patterns: ["Extension Detected[-:\\s]*([A-Za-z])"]
+
+IP Mismatch:
+  text_patterns: ["IP Mismatch[-:\\s]*([0-9]+)"]
+  transform:
+    type: convert_to_number
+
+# Narrative sections
+Strong Points:
+  # Capture multi-line list until next known header or blank line
+  text_patterns:
+    - "Strong Points[-:\\s]*([\\s\\S]*?)(?:Areas Of Improvement|Overall Feedback|$)"
+
+Areas Of Improvement:
+  text_patterns:
+    - "Areas Of Improvement[-:\\s]*([\\s\\S]*?)(?:Strong Points|Overall Feedback|$)"
+
+Overall Feedback:
+  text_patterns:
+    - "Overall Feedback[-:\\s]*([\\s\\S]*?)$"
+

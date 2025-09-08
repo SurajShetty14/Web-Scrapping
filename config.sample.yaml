@@ -1,0 +1,26 @@
+# Runtime options
+success_threshold: 0.5
+politeness_delay_seconds: 2
+
+selenium:
+  headless: false
+  save_screenshots: true
+  sleep_after_load: 3
+  wait_seconds: 15
+
+debug:
+  save_html: false
+
+# Optional: attempt API extraction if applicable
+# api_endpoint:
+#   url: "https://api.example.com/report?id=..."
+#   method: "GET"
+#   headers: {}
+#   params: {}
+#   body: {}
+
+# Optional: CSS selectors to wait for before parsing (Selenium only)
+# wait_css_selectors:
+#   - ".report-container"
+#   - "h1"
+
